@@ -26,10 +26,12 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 public class Application {
 
     public void run() throws Exception {
+        log.info("start");
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -53,7 +55,7 @@ public class Application {
     }
 
     public static void main(String[] args) throws Exception {
-        new Application().run();
+        log.info("start");
     }
 
 }

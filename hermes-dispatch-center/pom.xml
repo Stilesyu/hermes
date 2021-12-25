@@ -26,8 +26,8 @@
             <artifactId>netty-all</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>com.github.www</groupId>
+            <artifactId>hermes-logging</artifactId>
         </dependency>
     </dependencies>
 
