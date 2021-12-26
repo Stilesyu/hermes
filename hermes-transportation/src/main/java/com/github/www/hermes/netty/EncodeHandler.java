@@ -14,38 +14,11 @@
  * limitations under the License.
  */
 
-package com.github.www.hermes.protocol;
+package com.github.www.hermes.netty;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public interface Header {
-
-    /**
-     * get hermes version
-     *
-     * @author Stilesyu
-     * @since 1.0
-     */
-    short getVersion();
-
-    /**
-     * get request key
-     *
-     * @author Stilesyu
-     * @since 1.0
-     */
-    Long getKey();
-
-
-    /**
-     * get request remark
-     *
-     * @author Stilesyu
-     * @since 1.0
-     */
-    String getRemark();
-
-
+public class EncodeHandler  {
 }

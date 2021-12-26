@@ -16,36 +16,29 @@
 
 package com.github.www.hermes.protocol;
 
+import java.util.Map;
+
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public interface Header {
-
-    /**
-     * get hermes version
-     *
-     * @author Stilesyu
-     * @since 1.0
-     */
-    short getVersion();
-
-    /**
-     * get request key
-     *
-     * @author Stilesyu
-     * @since 1.0
-     */
-    Long getKey();
+public class ConnectHeader implements Header{
 
 
-    /**
-     * get request remark
-     *
-     * @author Stilesyu
-     * @since 1.0
-     */
-    String getRemark();
 
+    public short getVersion() {
+        return 0;
+    }
 
+    public Long getKey() {
+        return null;
+    }
+
+    public String getRemark() {
+        return null;
+    }
+
+    public Map<String, String> getExtra() {
+        return null;
+    }
 }
