@@ -12,7 +12,11 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>hermes-dispatch-center</module>
+        <module>hermes-dispatch</module>
+        <module>hermes-transportation</module>
+        <module>hermes-storehouse</module>
+        <module>hermes-client</module>
+        <module>hermes-common</module>
     </modules>
 
 
