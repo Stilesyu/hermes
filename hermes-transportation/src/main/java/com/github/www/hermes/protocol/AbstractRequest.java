@@ -16,11 +16,36 @@
 
 package com.github.www.hermes.protocol;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.github.www.hermes.common.ApiKeys;
+
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class Request {
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "code")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = HeartbeatRequest.class, name = "0")
+})
+public abstract class AbstractRequest {
+    public short code;
+    private short version;
 
 
+    public short getCode() {
+        return code;
+    }
+
+    public void setCode(ApiKeys keys) {
+        this.code = keys.getCode();
+    }
+
+    public short getVersion() {
+        return version;
+    }
+
+    public void setVersion(short version) {
+        this.version = version;
+    }
 }

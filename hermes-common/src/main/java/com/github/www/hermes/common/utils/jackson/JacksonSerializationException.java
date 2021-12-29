@@ -14,21 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.www.hermes.channel;
 
-import lombok.Data;
 
-import java.util.List;
+package com.github.www.hermes.common.utils.jackson;
 
-@Data
-public class User {
-    private Long id;
-    private List<UserItem> userItemList;
+public class JacksonSerializationException extends RuntimeException {
+    private static final long serialVersionUID = -642550502521468615L;
 
-    @Data
-    public static class UserItem {
-        private String name;
-        private String address;
+    public JacksonSerializationException() {
+    }
 
+    public JacksonSerializationException(String message) {
+        super(message);
+    }
+
+    public JacksonSerializationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public JacksonSerializationException(Throwable cause) {
+        super(cause);
     }
 }
