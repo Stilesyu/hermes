@@ -18,6 +18,7 @@ package com.github.www.hermes.protocol;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.github.www.hermes.common.constant.ApiConstant;
 import com.github.www.hermes.common.ApiKeys;
 
 /**
@@ -26,7 +27,7 @@ import com.github.www.hermes.common.ApiKeys;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "code")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = HeartbeatRequest.class, name = "0")
+        @JsonSubTypes.Type(value = HeartbeatRequest.class, name = ApiConstant.HEARTBEAT)
 })
 public abstract class AbstractRequest {
     public short code;

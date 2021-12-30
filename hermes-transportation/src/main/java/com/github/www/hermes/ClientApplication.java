@@ -45,7 +45,6 @@ public class ClientApplication implements Application {
             group.shutdownGracefully();
         }
     }
-
     @Override
     public void close() {
 
