@@ -13,7 +13,7 @@ import java.util.List;
  * @author Stiles yu
  * @since 1.0
  */
-public class JsonDecoder extends MessageToMessageDecoder<ByteBuf> {
+public class JSONDecode extends MessageToMessageDecoder<ByteBuf> {
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
         byte[] bytes = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(bytes);
