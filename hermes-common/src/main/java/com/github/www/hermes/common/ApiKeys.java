@@ -20,8 +20,15 @@ public enum ApiKeys {
     public short getCode() {
         return code;
     }
-
     public String getName() {
         return name;
+    }
+
+    public short getLowestSupportVersion() {
+        return lowestSupportVersion;
+    }
+
+    public short getHighestSupportVersion() {
+        return highestSupportVersion;
     }
 }

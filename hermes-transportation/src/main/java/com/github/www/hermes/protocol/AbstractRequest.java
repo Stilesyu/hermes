@@ -20,33 +20,26 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.github.www.hermes.common.constant.ApiConstant;
 import com.github.www.hermes.common.ApiKeys;
+import lombok.Data;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "code")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "code", visible = true, include = JsonTypeInfo.As.EXISTING_PROPERTY)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = HeartbeatRequest.class, name = ApiConstant.HEARTBEAT)
 })
+@Data
 public abstract class AbstractRequest {
-    public short code;
+    private short code;
     private short version;
 
-
-    public short getCode() {
-        return code;
-    }
-
-    public void setCode(ApiKeys keys) {
+    public void code(ApiKeys keys) {
         this.code = keys.getCode();
     }
 
-    public short getVersion() {
-        return version;
-    }
-
-    public void setVersion(short version) {
-        this.version = version;
+    public void version(ApiKeys keys) {
+        this.version = keys.getHighestSupportVersion();
     }
 }

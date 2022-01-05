@@ -9,7 +9,6 @@ public class ClientApplication implements Application {
 
     @Override
     public void open() throws InterruptedException {
-
     }
 
     @Override
