@@ -2,8 +2,8 @@ package com.github.www.hermes;
 
 import com.github.www.hermes.common.utils.jackson.JacksonUtils;
 import com.github.www.hermes.config.NettyConfig;
-import com.github.www.hermes.netty.JSONDecode;
-import com.github.www.hermes.netty.JSONEncoder;
+import com.github.www.hermes.netty.handler.JSONDecode;
+import com.github.www.hermes.netty.handler.JSONEncoder;
 import com.github.www.hermes.protocol.HeartbeatRequest;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -34,9 +34,10 @@ public class NettyTest {
 
     @Test
     public void JSONEncode() {
-        HeartbeatRequest request = new HeartbeatRequest(new Date());
+        HeartbeatRequest r1 = new HeartbeatRequest(new Date());
+        HeartbeatRequest r2 = new HeartbeatRequest(new Date());
         EmbeddedChannel embeddedChannel = new EmbeddedChannel(new JSONEncoder());
-        embeddedChannel.writeOutbound(request);
+        embeddedChannel.writeOutbound(r1, r2);
         embeddedChannel.finish();
         ByteBuf buffer = embeddedChannel.readOutbound();
         printByteBuf(buffer);
@@ -44,13 +45,18 @@ public class NettyTest {
 
     @Test
     public void JSONDecode() {
+        EmbeddedChannel embeddedChannel = new EmbeddedChannel(new JSONDecode());
         HeartbeatRequest request = new HeartbeatRequest(new Date());
         String json = JacksonUtils.serialize(request);
-        EmbeddedChannel embeddedChannel = new EmbeddedChannel(new JSONDecode());
-        embeddedChannel.writeInbound(Unpooled.buffer().writeBytes(json.getBytes()));
-        HeartbeatRequest heartbeatRequest = embeddedChannel.readInbound();
-        System.out.println(JacksonUtils.serialize(heartbeatRequest));;
+        ByteBuf byteBuf = Unpooled.buffer().writeBytes(json.getBytes());
 
+
+        HeartbeatRequest r2 = new HeartbeatRequest(new Date());
+        String jj = JacksonUtils.serialize(request);
+        ByteBuf by = Unpooled.buffer().writeBytes(jj.getBytes());
+        embeddedChannel.writeInbound(byteBuf,by);
+        HeartbeatRequest heartbeatRequest = embeddedChannel.readInbound();
+        System.out.println(JacksonUtils.serialize(heartbeatRequest));
     }
 
 

@@ -3,7 +3,7 @@ package com.github.www.hermes;
 import com.github.www.hermes.common.constant.SystemConstant;
 import com.github.www.hermes.common.utils.SystemUtils;
 import com.github.www.hermes.config.NettyConfig;
-import com.github.www.hermes.netty.JSONDecode;
+import com.github.www.hermes.netty.handler.JSONDecode;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;

@@ -1,4 +1,4 @@
-package com.github.www.hermes.netty;
+package com.github.www.hermes.netty.handler;
 
 import com.github.www.hermes.common.utils.jackson.JacksonUtils;
 import com.github.www.hermes.protocol.AbstractRequest;
