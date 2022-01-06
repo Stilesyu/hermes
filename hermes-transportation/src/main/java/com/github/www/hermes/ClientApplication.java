@@ -8,7 +8,7 @@ public class ClientApplication implements Application {
 
 
     @Override
-    public void open() throws InterruptedException {
+    public void start() throws InterruptedException {
     }
 
     @Override

@@ -4,12 +4,12 @@ package com.github.www.hermes;
 public interface Application {
 
     /**
-     * open app
+     * start app
      *
      * @author Stilesyu
      * @since 1.0
      */
-    void open() throws InterruptedException;
+    void start() throws InterruptedException;
 
 
     /**

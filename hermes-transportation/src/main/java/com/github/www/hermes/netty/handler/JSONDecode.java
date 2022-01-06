@@ -5,6 +5,7 @@ import com.github.www.hermes.protocol.AbstractRequest;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
 
 import java.util.List;
@@ -21,5 +22,15 @@ public class JSONDecode extends ByteToMessageDecoder {
         in.readBytes(bytes);
         AbstractRequest request = JacksonUtils.deserialize(new String(bytes, CharsetUtil.UTF_8), AbstractRequest.class);
         out.add(request);
+    }
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        if (evt instanceof IdleStateEvent) {
+            //TODO record log
+            ctx.channel().close();
+        } else {
+            super.userEventTriggered(ctx, evt);
+        }
     }
 }

@@ -12,6 +12,7 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
@@ -45,7 +46,7 @@ public class ServerApplication implements Application {
     }
 
     @Override
-    public void open() throws InterruptedException {
+    public void start() throws InterruptedException {
         ServerBootstrap bootstrap = new ServerBootstrap()
                 .group(bossEventLoopGroup, workerEventLoopGroup)
                 .channel(userEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
@@ -58,7 +59,8 @@ public class ServerApplication implements Application {
                     @Override
                     protected void initChannel(Channel ch) {
                         //TODO use EventExecutorGroup
-                        ch.pipeline().addLast(new JSONDecode());
+                        ch.pipeline().addLast("decode request", new JSONDecode())
+                                .addLast("heartbeat",new IdleStateHandler(0,0,200));
                     }
                 });
         bootstrap.bind().sync();
