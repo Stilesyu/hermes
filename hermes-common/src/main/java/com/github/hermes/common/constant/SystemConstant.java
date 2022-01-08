@@ -1,4 +1,4 @@
-package com.github.hermes.hermes.common.constant;
+package com.github.hermes.common.constant;
 
 /**
  * @author Stiles yu

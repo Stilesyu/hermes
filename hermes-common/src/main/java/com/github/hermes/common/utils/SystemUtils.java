@@ -15,22 +15,27 @@
  */
 
 
-package com.github.hermes.dispatch.config;
+package com.github.hermes.common.utils;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
+import com.github.hermes.common.constant.SystemConstant;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-@Data
-@Accessors(chain = true)
-public class ServerNettyConfig {
+public class SystemUtils {
 
-    private boolean userEpoll = false;
-    private int workThreadSize = 5;
-    private int port = 9607;
+
+    public static String getCurrentSystemOs() {
+        String systemOs = System.getProperty("os.name");
+        if (systemOs.toLowerCase().contains("linux")) {
+            return SystemConstant.LINUX;
+        } else if (systemOs.toLowerCase().contains("mac")) {
+            return SystemConstant.MAC_OS;
+        } else {
+            return SystemConstant.WINDOWS;
+        }
+    }
 
 
 }

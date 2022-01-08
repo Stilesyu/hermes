@@ -21,8 +21,8 @@ package com.github.transportation.protocol;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.github.hermes.hermes.common.constant.ApiConstant;
-import com.github.hermes.hermes.common.ApiKeys;
+import com.github.hermes.common.constant.ApiConstant;
+import com.github.hermes.common.ApiKeys;
 import lombok.Data;
 
 /**

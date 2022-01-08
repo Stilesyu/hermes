@@ -1,6 +1,7 @@
 package com.github.hermes.hermes;
 
-import com.github.hermes.hermes.common.utils.SystemUtils;
+
+import com.github.hermes.common.utils.SystemUtils;
 
 /**
  * @author Stiles yu

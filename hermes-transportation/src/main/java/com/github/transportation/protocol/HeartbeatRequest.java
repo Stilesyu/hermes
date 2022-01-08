@@ -20,7 +20,7 @@
 
 package com.github.transportation.protocol;
 
-import com.github.hermes.hermes.common.ApiKeys;
+import com.github.hermes.common.ApiKeys;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

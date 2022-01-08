@@ -18,7 +18,7 @@
  */
 
 
-package com.github.client.dispatch;
+package com.github.dispatch;
 
 import com.github.hermes.dispatch.ServerApplication;
 import com.github.hermes.dispatch.config.ServerNettyConfig;

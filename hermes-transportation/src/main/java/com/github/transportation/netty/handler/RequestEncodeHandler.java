@@ -21,7 +21,7 @@
 
 package com.github.transportation.netty.handler;
 
-import com.github.hermes.hermes.common.utils.jackson.JacksonUtils;
+import com.github.hermes.common.utils.jackson.JacksonUtils;
 import com.github.transportation.protocol.AbstractRequest;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -31,7 +31,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * @author Stiles yu
  * @since 1.0
  */
-public class JSONEncoder extends MessageToByteEncoder<AbstractRequest> {
+public class RequestEncodeHandler extends MessageToByteEncoder<AbstractRequest> {
 
     public static String NAME = "convert abstractRequest to bytes";
 

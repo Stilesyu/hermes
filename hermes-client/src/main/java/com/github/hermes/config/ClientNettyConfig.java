@@ -18,7 +18,6 @@
  */
 
 
-
 package com.github.hermes.config;
 
 import lombok.Data;
@@ -32,5 +31,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ClientNettyConfig {
     private String serverAddress;
+    private int serverPort = 9607;
     private int port = 9608;
 }

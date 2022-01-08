@@ -17,11 +17,12 @@
 
 package com.github.hermes.dispatch;
 
-import com.github.transportation.Application;
-import com.github.hermes.hermes.common.constant.SystemConstant;
-import com.github.hermes.hermes.common.utils.SystemUtils;
+import com.github.hermes.common.constant.SystemConstant;
+import com.github.hermes.common.utils.SystemUtils;
 import com.github.hermes.dispatch.config.ServerNettyConfig;
-import com.github.transportation.netty.handler.JSONDecode;
+import com.github.transportation.Application;
+import com.github.transportation.netty.handler.ConnectLogHandler;
+import com.github.transportation.netty.handler.RequestDecodeHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
@@ -29,7 +30,6 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -70,19 +70,20 @@ public class ServerApplication implements Application {
                 .channel(userEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 1024)
                 .localAddress(new InetSocketAddress(nettyConfig.getPort()))
-                .handler(new LoggingHandler())
+                .handler(new ConnectLogHandler(false))
                 .childHandler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel ch) {
                         //TODO use EventExecutorGroup
-                        ch.pipeline().addLast("decode request", new JSONDecode())
+                        ch.pipeline()
+                                .addFirst(new ConnectLogHandler(false))
+                                .addLast(RequestDecodeHandler.NAME, new RequestDecodeHandler())
                                 .addLast("heartbeat", new IdleStateHandler(0, 0, 200));
                     }
                 });
         ChannelFuture future = bootstrap.bind().sync();
         //waiting until channel closed
         future.channel().closeFuture().sync();
-
     }
 
 

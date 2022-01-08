@@ -1,4 +1,4 @@
-package com.github.hermes.hermes.common;
+package com.github.hermes.common;
 
 
 public enum ApiKeys {

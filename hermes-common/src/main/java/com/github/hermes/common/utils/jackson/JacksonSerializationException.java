@@ -16,7 +16,7 @@
 
 
 
-package com.github.hermes.hermes.common.utils.jackson;
+package com.github.hermes.common.utils.jackson;
 
 public class JacksonSerializationException extends RuntimeException {
     private static final long serialVersionUID = -642550502521468615L;

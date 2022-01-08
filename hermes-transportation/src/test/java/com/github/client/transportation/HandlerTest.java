@@ -20,7 +20,8 @@
 
 package com.github.client.transportation;
 
-import com.github.hermes.hermes.common.utils.jackson.JacksonUtils;
+import com.github.hermes.common.utils.jackson.JacksonUtils;
+import com.github.transportation.netty.handler.ConnectLogHandler;
 import com.github.transportation.netty.handler.JSONDecode;
 import com.github.transportation.netty.handler.JSONEncoder;
 import com.github.transportation.protocol.HeartbeatRequest;
@@ -63,6 +64,7 @@ public class  HandlerTest{
         HeartbeatRequest heartbeatRequest = embeddedChannel.readInbound();
         System.out.println(JacksonUtils.serialize(heartbeatRequest));
     }
+
 
 
     private void printByteBuf(ByteBuf buffer) {

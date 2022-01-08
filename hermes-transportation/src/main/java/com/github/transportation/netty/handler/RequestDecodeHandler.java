@@ -20,7 +20,7 @@
 
 package com.github.transportation.netty.handler;
 
-import com.github.hermes.hermes.common.utils.jackson.JacksonUtils;
+import com.github.hermes.common.utils.jackson.JacksonUtils;
 import com.github.transportation.protocol.AbstractRequest;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,7 +34,7 @@ import java.util.List;
  * @author Stiles yu
  * @since 1.0
  */
-public class JSONDecode extends ByteToMessageDecoder {
+public class RequestDecodeHandler extends ByteToMessageDecoder {
 
 
     public static String NAME = "convert bytes to abstractRequest";

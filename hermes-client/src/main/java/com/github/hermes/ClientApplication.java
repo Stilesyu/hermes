@@ -20,10 +20,11 @@
 
 package com.github.hermes;
 
-import com.github.transportation.Application;
 import com.github.hermes.config.ClientNettyConfig;
-import com.github.transportation.netty.handler.JSONEncoder;
+import com.github.transportation.Application;
+import com.github.transportation.netty.handler.RequestEncodeHandler;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -55,16 +56,17 @@ public class ClientApplication implements Application {
         Bootstrap bootstrap = new Bootstrap()
                 .group(workerGroup)
                 .channel(NioSocketChannel.class)
-                .remoteAddress(new InetSocketAddress(nettyConfig.getServerAddress(), nettyConfig.getPort()))
+                .remoteAddress(new InetSocketAddress(nettyConfig.getServerAddress(), nettyConfig.getServerPort()))
                 .option(ChannelOption.SO_BACKLOG, 1024)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(JSONEncoder.NAME, new JSONEncoder())
+                        ch.pipeline().addLast(RequestEncodeHandler.NAME, new RequestEncodeHandler())
                                 .addLast(new IdleStateHandler(60, 0, 0));
                     }
                 });
-        bootstrap.connect().sync();
+        ChannelFuture future = bootstrap.connect().sync();
+        future.channel().closeFuture().sync();
     }
 
     @Override
