@@ -15,24 +15,23 @@
  */
 
 
+package com.github.hermes.dispatch.config;
 
-package com.github.hermes.hermes.common.utils.jackson;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
-public class JacksonSerializationException extends RuntimeException {
-    private static final long serialVersionUID = -642550502521468615L;
+/**
+ * @author Stiles yu
+ * @since 1.0
+ */
+@Data
+@Accessors(chain = true)
+public class ServerNettyConfig {
 
-    public JacksonSerializationException() {
-    }
+    private boolean userEpoll = false;
+    private int workThreadSize = 5;
+    private int serverPort = 9607;
+    private int port = 9607;
 
-    public JacksonSerializationException(String message) {
-        super(message);
-    }
 
-    public JacksonSerializationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public JacksonSerializationException(Throwable cause) {
-        super(cause);
-    }
 }

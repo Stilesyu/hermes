@@ -1,6 +1,6 @@
-package com.github.www.hermes.common.utils;
+package com.github.hermes.hermes.common.utils;
 
-import com.github.www.hermes.common.constant.SystemConstant;
+import com.github.hermes.hermes.common.constant.SystemConstant;
 
 /**
  * @author Stiles yu

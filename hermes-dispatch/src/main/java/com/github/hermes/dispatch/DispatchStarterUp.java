@@ -15,24 +15,13 @@
  */
 
 
+package com.github.hermes.dispatch;
 
-package com.github.hermes.hermes.common.utils.jackson;
+/**
+ * @author Stiles yu
+ * @since 1.0
+ */
+public class DispatchStarterUp {
 
-public class JacksonSerializationException extends RuntimeException {
-    private static final long serialVersionUID = -642550502521468615L;
 
-    public JacksonSerializationException() {
-    }
-
-    public JacksonSerializationException(String message) {
-        super(message);
-    }
-
-    public JacksonSerializationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public JacksonSerializationException(Throwable cause) {
-        super(cause);
-    }
 }

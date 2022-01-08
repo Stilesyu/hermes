@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.www.hermes.common.utils.jackson;
+package com.github.hermes.hermes.common.utils.jackson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
