@@ -22,8 +22,8 @@ package com.github.client.transportation;
 
 import com.github.hermes.common.utils.jackson.JacksonUtils;
 import com.github.transportation.netty.handler.ConnectLogHandler;
-import com.github.transportation.netty.handler.JSONDecode;
-import com.github.transportation.netty.handler.JSONEncoder;
+import com.github.transportation.netty.handler.RequestDecodeHandler;
+import com.github.transportation.netty.handler.RequestEncodeHandler;
 import com.github.transportation.protocol.HeartbeatRequest;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -44,7 +44,7 @@ public class  HandlerTest{
     public void JSONEncode() {
         HeartbeatRequest r1 = new HeartbeatRequest(new Date());
         HeartbeatRequest r2 = new HeartbeatRequest(new Date());
-        EmbeddedChannel embeddedChannel = new EmbeddedChannel(new JSONEncoder());
+        EmbeddedChannel embeddedChannel = new EmbeddedChannel(new RequestEncodeHandler());
         embeddedChannel.writeOutbound(r1, r2);
         embeddedChannel.finish();
         ByteBuf buffer = embeddedChannel.readOutbound();
@@ -52,8 +52,8 @@ public class  HandlerTest{
     }
 
     @Test
-    public void JSONDecode() {
-        EmbeddedChannel embeddedChannel = new EmbeddedChannel(new JSONDecode());
+    public void RequestDecodeHandler() {
+        EmbeddedChannel embeddedChannel = new EmbeddedChannel(new RequestDecodeHandler());
         HeartbeatRequest request = new HeartbeatRequest(new Date());
         String json = JacksonUtils.serialize(request);
         ByteBuf byteBuf = Unpooled.buffer().writeBytes(json.getBytes());

@@ -27,6 +27,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ import java.util.List;
  * @author Stiles yu
  * @since 1.0
  */
+@Slf4j
 public class RequestDecodeHandler extends ByteToMessageDecoder {
 
 
@@ -45,15 +47,7 @@ public class RequestDecodeHandler extends ByteToMessageDecoder {
         in.readBytes(bytes);
         AbstractRequest request = JacksonUtils.deserialize(new String(bytes, CharsetUtil.UTF_8), AbstractRequest.class);
         out.add(request);
+        log.debug("receiving request:{}",JacksonUtils.serialize(request));
     }
 
-    @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (evt instanceof IdleStateEvent) {
-            //TODO record log
-            ctx.channel().close();
-        } else {
-            super.userEventTriggered(ctx, evt);
-        }
-    }
 }

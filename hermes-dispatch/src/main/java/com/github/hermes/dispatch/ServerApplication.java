@@ -22,6 +22,7 @@ import com.github.hermes.common.utils.SystemUtils;
 import com.github.hermes.dispatch.config.ServerNettyConfig;
 import com.github.transportation.Application;
 import com.github.transportation.netty.handler.ConnectLogHandler;
+import com.github.transportation.netty.handler.HeartBeatHandler;
 import com.github.transportation.netty.handler.RequestDecodeHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -69,6 +70,7 @@ public class ServerApplication implements Application {
                 .group(bossEventLoopGroup, workerEventLoopGroup)
                 .channel(userEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 1024)
+                .option(ChannelOption.SO_KEEPALIVE, false)
                 .localAddress(new InetSocketAddress(nettyConfig.getPort()))
                 .handler(new ConnectLogHandler(false))
                 .childHandler(new ChannelInitializer<Channel>() {
@@ -78,7 +80,8 @@ public class ServerApplication implements Application {
                         ch.pipeline()
                                 .addFirst(new ConnectLogHandler(false))
                                 .addLast(RequestDecodeHandler.NAME, new RequestDecodeHandler())
-                                .addLast("heartbeat", new IdleStateHandler(0, 0, 200));
+                                .addLast("heartbeat", new IdleStateHandler(0, 0, 200))
+                                .addLast(new HeartBeatHandler());
                     }
                 });
         ChannelFuture future = bootstrap.bind().sync();

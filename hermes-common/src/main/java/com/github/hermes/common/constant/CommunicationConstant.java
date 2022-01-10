@@ -14,24 +14,17 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  *
- *
  */
 
-
-package com.github.hermes.config;
-
-import lombok.Data;
-import lombok.experimental.Accessors;
+package com.github.hermes.common.constant;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-@Data
-@Accessors(chain = true)
-public class ClientNettyConfig {
-    private String serverAddress;
-    private int serverPort = 9607;
-    private int port = 9608;
-    private int maxHeartbeatRetries = 5;
+public interface CommunicationConstant {
+
+    int MAX_HEARTBEAT_RETRIES = 3;
+
+
 }

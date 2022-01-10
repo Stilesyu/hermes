@@ -22,6 +22,7 @@ package com.github.hermes;
 
 import com.github.hermes.config.ClientNettyConfig;
 import com.github.transportation.Application;
+import com.github.transportation.netty.handler.HeartBeatHandler;
 import com.github.transportation.netty.handler.RequestEncodeHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -62,7 +63,9 @@ public class ClientApplication implements Application {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline().addLast(RequestEncodeHandler.NAME, new RequestEncodeHandler())
-                                .addLast(new IdleStateHandler(60, 0, 0));
+                                .addLast(new IdleStateHandler(5, 0, 0))
+                                .addLast(HeartBeatHandler.NAME,new HeartBeatHandler())
+                        ;
                     }
                 });
         ChannelFuture future = bootstrap.connect().sync();
@@ -73,4 +76,9 @@ public class ClientApplication implements Application {
     public void close() {
         workerGroup.shutdownGracefully();
     }
+
+    public void reconnect(){
+
+    }
+
 }
