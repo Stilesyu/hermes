@@ -22,7 +22,6 @@ import com.github.hermes.common.utils.SystemUtils;
 import com.github.hermes.dispatch.config.ServerNettyConfig;
 import com.github.transportation.Application;
 import com.github.transportation.netty.handler.ConnectLogHandler;
-import com.github.transportation.netty.handler.HeartBeatHandler;
 import com.github.transportation.netty.handler.RequestDecodeHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
