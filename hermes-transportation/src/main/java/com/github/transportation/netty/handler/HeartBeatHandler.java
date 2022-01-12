@@ -18,17 +18,22 @@
 
 package com.github.transportation.netty.handler;
 
+import com.github.transportation.context.ApplicationContext;
 import com.github.transportation.context.ApplicationHolder;
 import com.github.transportation.protocol.HeartbeatRequest;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
 
+import java.io.IOException;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 import static io.netty.handler.timeout.IdleState.READER_IDLE;
 
@@ -46,8 +51,12 @@ public class HeartBeatHandler extends ChannelDuplexHandler {
                 if (currentHeartBeatRetries > 3) {
                     ApplicationHolder.getApplicationContext().doConnect();
                 } else {
-                    ctx.writeAndFlush(new HeartbeatRequest());
-                    currentHeartBeatRetries++;
+                    ChannelFuture future = ctx.writeAndFlush(new HeartbeatRequest());
+                    if (future.isSuccess()) {
+                        currentHeartBeatRetries = 0;
+                    } else {
+                        currentHeartBeatRetries++;
+                    }
                 }
             }
         }
@@ -57,22 +66,14 @@ public class HeartBeatHandler extends ChannelDuplexHandler {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        AtomicBoolean success = new AtomicBoolean(false);
-        ScheduledFuture<?> scheduledFuture = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
-            Channel channel = bootstrap.bind().channel();
-            if (channel.isActive()) {
-                success.set(true);
-            }
-        }, 0, 5, TimeUnit.SECONDS);
-        while (true) {
-            if (success.get()) {
-                boolean cancel = scheduledFuture.cancel(true);
-                if (cancel) {
-                    break;
-                }
-            }
-        }
+        ApplicationHolder.getApplicationContext().doConnect();
     }
 
-
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        if (cause instanceof IOException) {
+            return;
+        }
+        ctx.fireExceptionCaught(cause);
+    }
 }
