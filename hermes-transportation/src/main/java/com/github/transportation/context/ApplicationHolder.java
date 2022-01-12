@@ -14,40 +14,25 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  *
- *
  */
 
-
-package com.github.transportation.protocol;
-
-import com.github.hermes.common.ApiKeys;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-
-import java.util.Date;
+package com.github.transportation.context;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-@Data
-@Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
-public class HeartbeatRequest extends AbstractRequest {
-    private Date at;
+public class ApplicationHolder {
+
+    private static final ThreadLocal<ApplicationContext> applicationContextThreadLocal = new InheritableThreadLocal<>();
 
 
-    public HeartbeatRequest() {
-        this.at = new Date();
-        super.code(ApiKeys.HEARTBEAT);
-        super.version(ApiKeys.HEARTBEAT);
+    public static void initApplicationHolder(ApplicationContext context) {
+        applicationContextThreadLocal.set(context);
     }
 
-    public HeartbeatRequest(Date at) {
-        this.at = at;
-        super.code(ApiKeys.HEARTBEAT);
-        super.version(ApiKeys.HEARTBEAT);
+    public static ApplicationContext getApplicationContext() {
+        return applicationContextThreadLocal.get();
     }
+
 }

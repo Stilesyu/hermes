@@ -14,40 +14,16 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  *
- *
  */
 
-
-package com.github.transportation.protocol;
-
-import com.github.hermes.common.ApiKeys;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-
-import java.util.Date;
+package com.github.hermes.common.exception;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-@Data
-@Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
-public class HeartbeatRequest extends AbstractRequest {
-    private Date at;
-
-
-    public HeartbeatRequest() {
-        this.at = new Date();
-        super.code(ApiKeys.HEARTBEAT);
-        super.version(ApiKeys.HEARTBEAT);
-    }
-
-    public HeartbeatRequest(Date at) {
-        this.at = at;
-        super.code(ApiKeys.HEARTBEAT);
-        super.version(ApiKeys.HEARTBEAT);
+public class HermesParameterException extends HermesException {
+    public HermesParameterException(String message) {
+        super(message);
     }
 }
