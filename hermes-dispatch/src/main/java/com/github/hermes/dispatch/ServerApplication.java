@@ -21,7 +21,9 @@ import com.github.hermes.common.constant.SystemConstant;
 import com.github.hermes.common.utils.SystemUtils;
 import com.github.hermes.dispatch.config.ServerNettyConfig;
 import com.github.transportation.Application;
-import com.github.transportation.netty.handler.ConnectLogHandler;
+import com.github.transportation.context.ApplicationContext;
+import com.github.transportation.context.ApplicationHolder;
+import com.github.transportation.netty.handler.ConnectionLogHandler;
 import com.github.transportation.netty.handler.HeartBeatHandler;
 import com.github.transportation.netty.handler.RequestDecodeHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -46,6 +48,7 @@ public class ServerApplication implements Application {
     private final EventLoopGroup bossEventLoopGroup;
     private final EventLoopGroup workerEventLoopGroup;
     private final ServerNettyConfig nettyConfig;
+    private final ServerBootstrap bootstrap = new ServerBootstrap();
 
     /**
      * Initial event loop group.Linux platform  use {@link EpollEventLoopGroup} by default,while windows  use {@link NioEventLoopGroup} by default
@@ -66,24 +69,25 @@ public class ServerApplication implements Application {
 
     @Override
     public void start() throws InterruptedException {
-        ServerBootstrap bootstrap = new ServerBootstrap()
+        bootstrap
                 .group(bossEventLoopGroup, workerEventLoopGroup)
                 .channel(userEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 1024)
                 .option(ChannelOption.SO_KEEPALIVE, false)
                 .localAddress(new InetSocketAddress(nettyConfig.getPort()))
-                .handler(new ConnectLogHandler(false))
+                .handler(new ConnectionLogHandler())
                 .childHandler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel ch) {
                         //TODO use EventExecutorGroup
                         ch.pipeline()
-                                .addFirst(new ConnectLogHandler(false))
                                 .addLast(RequestDecodeHandler.NAME, new RequestDecodeHandler())
-                                .addLast("heartbeat", new IdleStateHandler(0, 0, 200))
-                                .addLast(new HeartBeatHandler());
+                                .addLast("idleStateHandler", new IdleStateHandler(0, 0, 200))
+                                .addLast(HeartBeatHandler.NAME, new HeartBeatHandler());
                     }
                 });
+        ApplicationContext context = ApplicationContext.builder().type(ApplicationContext.Type.SERVER).bootstrap(bootstrap).build();
+        ApplicationHolder.bindApplicationContext(context);
         ChannelFuture future = bootstrap.bind().sync();
         //waiting until channel closed
         future.channel().closeFuture().sync();

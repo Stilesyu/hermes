@@ -30,6 +30,9 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public class RequestDispatchHandler extends SimpleChannelInboundHandler<AbstractRequest> {
 
+    public static String NAME = "requestDispatchHandler";
+
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, AbstractRequest msg) throws Exception {
 

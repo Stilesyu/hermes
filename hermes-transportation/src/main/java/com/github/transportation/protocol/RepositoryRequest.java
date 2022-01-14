@@ -16,23 +16,20 @@
  *
  */
 
-package com.github.transportation.context;
+package com.github.transportation.protocol;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class ApplicationHolder {
-
-    private static final ThreadLocal<ApplicationContext> applicationContextThreadLocal = new InheritableThreadLocal<>();
-
-
-    public static void bindApplicationContext(ApplicationContext context) {
-        applicationContextThreadLocal.set(context);
-    }
-
-    public static ApplicationContext getApplicationContext() {
-        return applicationContextThreadLocal.get();
-    }
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
+public class RepositoryRequest extends AbstractRequest {
+    private String repositoryName;
 
 }

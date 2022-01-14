@@ -24,6 +24,7 @@ import com.github.hermes.config.ClientNettyConfig;
 import com.github.transportation.Application;
 import com.github.transportation.context.ApplicationContext;
 import com.github.transportation.context.ApplicationHolder;
+import com.github.transportation.netty.handler.ConnectionLogHandler;
 import com.github.transportation.netty.handler.HeartBeatHandler;
 import com.github.transportation.netty.handler.RequestEncodeHandler;
 import io.netty.bootstrap.Bootstrap;
@@ -64,14 +65,16 @@ public class ClientApplication implements Application {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) {
-                        ch.pipeline().addLast(RequestEncodeHandler.NAME, new RequestEncodeHandler())
-                                .addLast(new IdleStateHandler(5, 0, 0))
+                        ch.pipeline()
+                                .addLast(ConnectionLogHandler.NAME, new ConnectionLogHandler())
+                                .addLast(RequestEncodeHandler.NAME, new RequestEncodeHandler())
+                                .addLast("idleStateHandler", new IdleStateHandler(5, 0, 0))
                                 .addLast(HeartBeatHandler.NAME, new HeartBeatHandler())
                         ;
                     }
                 });
         ApplicationContext context = ApplicationContext.builder().type(ApplicationContext.Type.CLIENT).bootstrap(bootstrap).build();
-        ApplicationHolder.initApplicationHolder(context);
+        ApplicationHolder.bindApplicationContext(context);
         context.doConnect();
     }
 

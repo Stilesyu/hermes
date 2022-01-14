@@ -39,7 +39,7 @@ import java.util.List;
 public class RequestDecodeHandler extends ByteToMessageDecoder {
 
 
-    public static String NAME = "convert bytes to abstractRequest";
+    public static String NAME = "requestDecodeHandler";
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {

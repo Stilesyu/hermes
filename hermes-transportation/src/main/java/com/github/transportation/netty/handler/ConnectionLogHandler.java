@@ -16,6 +16,8 @@
 
 package com.github.transportation.netty.handler;
 
+import com.github.transportation.context.ApplicationContext;
+import com.github.transportation.context.ApplicationHolder;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
@@ -28,17 +30,15 @@ import java.net.SocketAddress;
  * @since 1.0
  */
 @Slf4j
-public class ConnectLogHandler extends ChannelDuplexHandler {
+public class ConnectionLogHandler extends ChannelDuplexHandler {
 
-    public boolean isClient;
+    public static String NAME = "connectionLogHandler";
 
-    public ConnectLogHandler(boolean isClient) {
-        this.isClient = isClient;
-    }
+    private final boolean isClient = ApplicationHolder.getApplicationContext().type.equals(ApplicationContext.Type.CLIENT);
 
 
     @Override
-    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+    public void channelRegistered(ChannelHandlerContext ctx) {
         SocketAddress remoteAddress = ctx.channel().remoteAddress();
         if (remoteAddress == null) {
             return;
