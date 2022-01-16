@@ -20,6 +20,7 @@
 
 package com.github.hermes;
 
+import com.github.hermes.common.utils.ThreadUtils;
 import com.github.hermes.config.ClientNettyConfig;
 import com.github.transportation.Application;
 import com.github.transportation.context.ApplicationContext;
@@ -53,7 +54,7 @@ public class ClientApplication implements Application {
 
     public ClientApplication(ClientNettyConfig nettyConfig) {
         this.nettyConfig = nettyConfig;
-        workerGroup = new NioEventLoopGroup();
+        workerGroup = new NioEventLoopGroup(ThreadUtils.createThreadFactory("workerNioEventLoopGroup"));
     }
 
     @Override

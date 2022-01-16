@@ -19,6 +19,7 @@ package com.github.hermes.dispatch;
 
 import com.github.hermes.common.constant.SystemConstant;
 import com.github.hermes.common.utils.SystemUtils;
+import com.github.hermes.common.utils.ThreadUtils;
 import com.github.hermes.dispatch.config.ServerNettyConfig;
 import com.github.transportation.Application;
 import com.github.transportation.context.ApplicationContext;
@@ -37,6 +38,8 @@ import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Stiles yu
@@ -59,11 +62,11 @@ public class ServerApplication implements Application {
     public ServerApplication(ServerNettyConfig config) {
         this.nettyConfig = config;
         if (userEpoll()) {
-            bossEventLoopGroup = new EpollEventLoopGroup(1);
-            workerEventLoopGroup = new EpollEventLoopGroup(config.getWorkThreadSize());
+            bossEventLoopGroup = new EpollEventLoopGroup(1, ThreadUtils.createThreadFactory("bossEpollEventLoopGroup"));
+            workerEventLoopGroup = new EpollEventLoopGroup(config.getWorkThreadSize(),ThreadUtils.createThreadFactory("workerEpollEventLoopGroup"));
         } else {
-            bossEventLoopGroup = new NioEventLoopGroup();
-            workerEventLoopGroup = new NioEventLoopGroup(config.getWorkThreadSize());
+            bossEventLoopGroup = new NioEventLoopGroup(1,ThreadUtils.createThreadFactory("bossNioEventLoopGroup"));
+            workerEventLoopGroup = new NioEventLoopGroup(config.getWorkThreadSize(),ThreadUtils.createThreadFactory("bossNioEventLoopGroup"));
         }
     }
 
