@@ -16,23 +16,16 @@
  *
  */
 
-package com.github.transportation.context;
+package com.github.hermes.common.exception;
+
+import java.net.SocketAddress;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class ApplicationHolder {
-
-    private static final ThreadLocal<AbstractApplicationContext> applicationContextThreadLocal = new InheritableThreadLocal<>();
-
-
-    public static void bindApplicationContext(AbstractApplicationContext context) {
-        applicationContextThreadLocal.set(context);
+public class HermesRequestException extends HermesException {
+    public HermesRequestException(SocketAddress address) {
+        super("send request to " + address + " failed");
     }
-
-    public static AbstractApplicationContext getApplicationContext() {
-        return applicationContextThreadLocal.get();
-    }
-
 }

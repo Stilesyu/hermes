@@ -18,42 +18,19 @@
 
 package com.github.transportation.context;
 
-import com.github.hermes.common.exception.HermesParameterException;
-import com.github.transportation.exception.HermesConnectException;
 import io.netty.bootstrap.AbstractBootstrap;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFutureListener;
 import lombok.Builder;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
 @Builder
-public class ApplicationContext {
+public class AbstractApplicationContext {
 
     public Type type;
     public AbstractBootstrap<?, ?> bootstrap;
 
-
-    public void doConnect() {
-        if (bootstrap == null) {
-            throw new HermesParameterException("Bootstrap not initialized");
-        }
-        if (bootstrap instanceof Bootstrap) {
-            ((Bootstrap) this.bootstrap).connect().addListener((ChannelFutureListener) future -> {
-                if (!future.isSuccess()) {
-                    future.channel().eventLoop().schedule(this::doConnect, 10, TimeUnit.SECONDS);
-                    throw new HermesConnectException();
-                }
-            });
-        } else {
-            throw new HermesParameterException("Only Client Application can call the doConnect method");
-        }
-    }
 
     public enum Type {
         CLIENT,

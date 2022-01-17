@@ -19,6 +19,7 @@
 package com.github.transportation.netty.handler;
 
 import com.github.transportation.context.ApplicationHolder;
+import com.github.transportation.context.ClientApplicationContext;
 import com.github.transportation.protocol.HeartbeatRequest;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelFuture;
@@ -40,7 +41,7 @@ public class HeartBeatHandler extends ChannelDuplexHandler {
             switch (event.state()) {
                 case READER_IDLE:
                     if (currentHeartBeatRetries > 3) {
-                        ApplicationHolder.getApplicationContext().doConnect();
+                        ((ClientApplicationContext)ApplicationHolder.getApplicationContext()).doConnect();
                     } else {
                         ChannelFuture future = ctx.writeAndFlush(new HeartbeatRequest());
                         if (future.isSuccess()) {
@@ -62,7 +63,7 @@ public class HeartBeatHandler extends ChannelDuplexHandler {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        ApplicationHolder.getApplicationContext().doConnect();
+        ((ClientApplicationContext)ApplicationHolder.getApplicationContext()).doConnect();
     }
 
     @Override

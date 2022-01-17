@@ -16,17 +16,22 @@
 
 package com.github.transportation;
 
+import com.github.transportation.protocol.AbstractRequest;
+import com.github.transportation.protocol.AbstractResponse;
+
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class TransportationClient {
-
-    public void onWay(){
-
-    }
+public interface TransportationClient {
 
 
+    void invokeOnWay(String remoteAddress, AbstractRequest request);
+
+    AbstractResponse invokeSync(String remoteAddress, AbstractRequest request);
+
+
+    AbstractRequest invokeAsync(String remoteAddress, AbstractRequest request);
 
 
 }

@@ -22,8 +22,9 @@ import com.github.hermes.common.utils.SystemUtils;
 import com.github.hermes.common.utils.ThreadUtils;
 import com.github.hermes.dispatch.config.ServerNettyConfig;
 import com.github.transportation.Application;
-import com.github.transportation.context.ApplicationContext;
+import com.github.transportation.context.AbstractApplicationContext;
 import com.github.transportation.context.ApplicationHolder;
+import com.github.transportation.context.ServerApplicationContext;
 import com.github.transportation.netty.handler.ConnectionLogHandler;
 import com.github.transportation.netty.handler.HeartBeatHandler;
 import com.github.transportation.netty.handler.RequestDecodeHandler;
@@ -38,8 +39,6 @@ import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Stiles yu
@@ -89,7 +88,7 @@ public class ServerApplication implements Application {
                                 .addLast(HeartBeatHandler.NAME, new HeartBeatHandler());
                     }
                 });
-        ApplicationContext context = ApplicationContext.builder().type(ApplicationContext.Type.SERVER).bootstrap(bootstrap).build();
+        AbstractApplicationContext context = ServerApplicationContext.builder().type(AbstractApplicationContext.Type.SERVER).bootstrap(bootstrap).build();
         ApplicationHolder.bindApplicationContext(context);
         ChannelFuture future = bootstrap.bind().sync();
         //waiting until channel closed

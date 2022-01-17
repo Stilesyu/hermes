@@ -14,34 +14,13 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  *
- *
  */
 
 package com.github.transportation.protocol;
-
-import java.util.Map;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class ConnectHeader implements Header{
-
-
-
-    public short getVersion() {
-        return 0;
-    }
-
-    public Long getKey() {
-        return null;
-    }
-
-    public String getRemark() {
-        return null;
-    }
-
-    public Map<String, String> getExtra() {
-        return null;
-    }
+public class AbstractResponse {
 }

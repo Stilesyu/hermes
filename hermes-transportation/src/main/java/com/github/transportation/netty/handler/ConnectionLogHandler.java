@@ -16,7 +16,7 @@
 
 package com.github.transportation.netty.handler;
 
-import com.github.transportation.context.ApplicationContext;
+import com.github.transportation.context.AbstractApplicationContext;
 import com.github.transportation.context.ApplicationHolder;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,7 +34,7 @@ public class ConnectionLogHandler extends ChannelDuplexHandler {
 
     public static String NAME = "connectionLogHandler";
 
-    private final boolean isClient = ApplicationHolder.getApplicationContext().type.equals(ApplicationContext.Type.CLIENT);
+    private final boolean isClient = ApplicationHolder.getApplicationContext().type.equals(AbstractApplicationContext.Type.CLIENT);
 
 
     @Override

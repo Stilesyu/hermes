@@ -23,8 +23,9 @@ package com.github.hermes;
 import com.github.hermes.common.utils.ThreadUtils;
 import com.github.hermes.config.ClientNettyConfig;
 import com.github.transportation.Application;
-import com.github.transportation.context.ApplicationContext;
+import com.github.transportation.context.AbstractApplicationContext;
 import com.github.transportation.context.ApplicationHolder;
+import com.github.transportation.context.ClientApplicationContext;
 import com.github.transportation.netty.handler.ConnectionLogHandler;
 import com.github.transportation.netty.handler.HeartBeatHandler;
 import com.github.transportation.netty.handler.RequestEncodeHandler;
@@ -74,9 +75,9 @@ public class ClientApplication implements Application {
                         ;
                     }
                 });
-        ApplicationContext context = ApplicationContext.builder().type(ApplicationContext.Type.CLIENT).bootstrap(bootstrap).build();
+        AbstractApplicationContext context = ClientApplicationContext.builder().type(AbstractApplicationContext.Type.CLIENT).bootstrap(bootstrap).build();
         ApplicationHolder.bindApplicationContext(context);
-        context.doConnect();
+        ((ClientApplicationContext) context).doConnect();
     }
 
     @Override

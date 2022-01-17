@@ -21,7 +21,6 @@
 package com.github.client.transportation;
 
 import com.github.hermes.common.utils.jackson.JacksonUtils;
-import com.github.transportation.netty.handler.ConnectLogHandler;
 import com.github.transportation.netty.handler.RequestDecodeHandler;
 import com.github.transportation.netty.handler.RequestEncodeHandler;
 import com.github.transportation.protocol.HeartbeatRequest;

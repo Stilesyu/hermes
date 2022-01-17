@@ -14,41 +14,20 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  *
- *
  */
 
-package com.github.transportation.protocol;
+package com.github.transportation.context;
+
+import io.netty.bootstrap.AbstractBootstrap;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public interface Header {
-
-    /**
-     * get hermes version
-     *
-     * @author Stilesyu
-     * @since 1.0
-     */
-    short getVersion();
-
-    /**
-     * get request key
-     *
-     * @author Stilesyu
-     * @since 1.0
-     */
-    Long getKey();
-
-
-    /**
-     * get request remark
-     *
-     * @author Stilesyu
-     * @since 1.0
-     */
-    String getRemark();
+public class ServerApplicationContext extends AbstractApplicationContext{
+    ServerApplicationContext(Type type, AbstractBootstrap<?, ?> bootstrap) {
+        super(type, bootstrap);
+    }
 
 
 }
