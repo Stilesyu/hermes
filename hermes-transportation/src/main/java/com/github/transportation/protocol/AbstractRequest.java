@@ -35,6 +35,7 @@ import lombok.Data;
 })
 @Data
 public abstract class AbstractRequest {
+    private Long requestId;
     private short code;
     private short version;
 

@@ -16,14 +16,14 @@
  *
  */
 
-package com.github.transportation;import com.github.hermes.common.exception.HermesRequestException;
-import com.github.transportation.TransportationClient;
+package com.github.transportation;
+
+import com.github.hermes.common.exception.HermesRequestException;
 import com.github.transportation.context.ApplicationHolder;
 import com.github.transportation.context.ClientApplicationContext;
 import com.github.transportation.protocol.AbstractRequest;
 import com.github.transportation.protocol.AbstractResponse;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,8 +34,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ClientTransportationClient implements TransportationClient {
 
-    ClientApplicationContext context = ((ClientApplicationContext) ApplicationHolder.getApplicationContext());
-    Channel channel = context.getChanel();
+
+    private final ClientApplicationContext context = ((ClientApplicationContext) ApplicationHolder.getApplicationContext());
+    private final Channel channel = context.getChanel();
+
 
     @Override
     public void invokeOnWay(String remoteAddress, AbstractRequest request) {
@@ -53,12 +55,20 @@ public class ClientTransportationClient implements TransportationClient {
     }
 
     @Override
-    public AbstractResponse invokeSync(String remoteAddress, AbstractRequest request) {
+    public AbstractResponse invokeSync(String remoteAddress, AbstractRequest request, long timeoutTime) {
+        try {
+            channel.writeAndFlush(request).addListener((ChannelFutureListener) future -> {
+                if (future.isSuccess()){
 
+                }
+            });
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
-    public AbstractRequest invokeAsync(String remoteAddress, AbstractRequest request) {
+    public AbstractRequest invokeAsync(String remoteAddress, AbstractRequest request, long timeoutTime) {
         return null;
     }
 

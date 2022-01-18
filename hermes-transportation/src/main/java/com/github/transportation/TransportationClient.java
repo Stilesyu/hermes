@@ -28,10 +28,10 @@ public interface TransportationClient {
 
     void invokeOnWay(String remoteAddress, AbstractRequest request);
 
-    AbstractResponse invokeSync(String remoteAddress, AbstractRequest request);
+    AbstractResponse invokeSync(String remoteAddress, AbstractRequest request, long timeoutTime);
 
 
-    AbstractRequest invokeAsync(String remoteAddress, AbstractRequest request);
+    AbstractRequest invokeAsync(String remoteAddress, AbstractRequest request, long timeoutTime);
 
 
 }
