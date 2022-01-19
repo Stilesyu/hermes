@@ -18,6 +18,7 @@
 
 package com.github.communication.utils;
 
+import com.github.communication.exception.HermesRequestException;
 import com.github.communication.protocol.AbstractResponse;
 
 import java.util.concurrent.CountDownLatch;
@@ -49,7 +50,7 @@ public class SyncFuture {
         } finally {
             countDownLatch.countDown();
         }
-        return null;
+        throw new HermesRequestException("request timeout");
     }
 
     public void receive(AbstractResponse response) {

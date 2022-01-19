@@ -16,7 +16,9 @@
  *
  */
 
-package com.github.hermes.common.exception;
+package com.github.communication.exception;
+
+import com.github.hermes.common.exception.HermesException;
 
 import java.net.SocketAddress;
 
@@ -26,6 +28,11 @@ import java.net.SocketAddress;
  */
 public class HermesRequestException extends HermesException {
     public HermesRequestException(SocketAddress address) {
-        super("send request to " + address + " failed");
+        super("Send request to " + address + " failed");
     }
+
+    public HermesRequestException(String message) {
+        super("Failed to send request:" + message);
+    }
+
 }

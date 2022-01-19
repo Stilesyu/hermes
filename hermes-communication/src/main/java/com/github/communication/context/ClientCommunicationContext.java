@@ -18,6 +18,7 @@
 
 package com.github.communication.context;
 
+import com.github.communication.utils.SyncFuture;
 import com.github.hermes.common.exception.HermesParameterException;
 import com.github.communication.exception.HermesConnectException;
 import io.netty.bootstrap.AbstractBootstrap;
@@ -25,6 +26,8 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,7 +36,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class ClientCommunicationContext extends AbstractCommunicationContext {
 
-
+    /**
+     * key:requestId
+     */
+    private final ConcurrentMap<Long, SyncFuture> responseMapping = new ConcurrentHashMap<>();
     private Channel channel;
 
     ClientCommunicationContext(Type type, AbstractBootstrap<?, ?> bootstrap) {
@@ -45,6 +51,17 @@ public class ClientCommunicationContext extends AbstractCommunicationContext {
         return channel;
     }
 
+    public void putResponseMapping(Long requestId, SyncFuture syncFuture) {
+        responseMapping.put(requestId, syncFuture);
+    }
+
+    public void remoteResponseMapping(Long requestId) {
+        responseMapping.remove(requestId);
+    }
+
+    public SyncFuture getSyncFuture(Long requestId) {
+        return responseMapping.get(requestId);
+    }
 
     public void doConnect() {
         if (bootstrap == null) {

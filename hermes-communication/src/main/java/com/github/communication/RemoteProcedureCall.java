@@ -23,7 +23,7 @@ import com.github.communication.protocol.AbstractResponse;
  * @author Stiles yu
  * @since 1.0
  */
-public interface TransportationClient {
+public interface RemoteProcedureCall {
 
 
     void invokeOnWay(String remoteAddress, AbstractRequest request);

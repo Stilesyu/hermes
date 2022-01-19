@@ -22,7 +22,8 @@ import com.github.communication.context.ClientCommunicationContext;
 import com.github.communication.context.CommunicationContextHolder;
 import com.github.communication.protocol.AbstractRequest;
 import com.github.communication.protocol.AbstractResponse;
-import com.github.hermes.common.exception.HermesRequestException;
+import com.github.communication.utils.SyncFuture;
+import com.github.communication.exception.HermesRequestException;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +33,11 @@ import lombok.extern.slf4j.Slf4j;
  * @since 1.0
  */
 @Slf4j
-public class ClientTransportationClient implements TransportationClient {
+public class ClientRemoteProcedureCall implements RemoteProcedureCall {
 
 
     private final ClientCommunicationContext context = ((ClientCommunicationContext) CommunicationContextHolder.getContext());
     private final Channel channel = context.getChanel();
-
 
     @Override
     public void invokeOnWay(String remoteAddress, AbstractRequest request) {
@@ -59,13 +59,17 @@ public class ClientTransportationClient implements TransportationClient {
         try {
             channel.writeAndFlush(request).addListener((ChannelFutureListener) future -> {
                 if (future.isSuccess()) {
-
+                    context.putResponseMapping(request.getRequestId(), new SyncFuture(timeoutTime));
+                    return;
                 }
+                log.warn("invokeOnWay:failed to send request.Remote address:{}", channel.remoteAddress());
+                throw new HermesRequestException(channel.remoteAddress());
             });
+            return context.getSyncFuture(request.getRequestId()).getResponse();
         } catch (Exception e) {
-
+            log.warn("invokeOnWay:failed to send request.Remote address:{},error message:{}", channel.remoteAddress(), e.getMessage());
+            throw new HermesRequestException(channel.remoteAddress());
         }
-        return null;
     }
 
     @Override
