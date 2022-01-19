@@ -28,7 +28,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>hermes-dispatch</artifactId>
+    <artifactId>hermes-dispatch-center</artifactId>
 
     <properties>
         <maven.test.skip>false</maven.test.skip>

@@ -20,8 +20,8 @@
 
 package com.github.dispatch;
 
-import com.github.hermes.dispatch.ServerApplication;
-import com.github.hermes.dispatch.config.ServerNettyConfig;
+import com.github.hermes.dispatch.center.ServerApplication;
+import com.github.hermes.dispatch.center.config.ServerNettyConfig;
 import com.github.transportation.Application;
 import org.junit.jupiter.api.Test;
 
