@@ -14,19 +14,23 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  *
- *
  */
 
+package com.github.communication.netty.handler;
 
-
-package com.github.hermes;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class NettyTest {
+public class ResponseHandler extends SimpleChannelInboundHandler {
 
 
 
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+
+    }
 }

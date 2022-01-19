@@ -18,15 +18,25 @@
  */
 
 
+package com.github.communication.netty.handler;
 
-package com.github.hermes;
+import com.github.communication.protocol.AbstractRequest;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class NettyTest {
+public class RequestDispatchHandler extends SimpleChannelInboundHandler<AbstractRequest> {
 
+    public static String NAME = "requestDispatchHandler";
+
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, AbstractRequest msg) throws Exception {
+
+    }
 
 
 }

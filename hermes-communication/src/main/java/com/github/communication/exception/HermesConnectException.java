@@ -14,19 +14,25 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  *
- *
  */
 
+package com.github.communication.exception;
 
-
-package com.github.hermes;
+import com.github.hermes.common.constant.ExceptionInfoConstant;
+import com.github.hermes.common.exception.HermesException;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class NettyTest {
+public class HermesConnectException extends HermesException {
 
+    public HermesConnectException() {
+        super(ExceptionInfoConstant.UNABLE_TO_CONNECT_SERVER);
 
+    }
 
+    public HermesConnectException(String message) {
+        super(message);
+    }
 }

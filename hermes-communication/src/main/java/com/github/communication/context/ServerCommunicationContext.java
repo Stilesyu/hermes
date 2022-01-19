@@ -14,19 +14,20 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  *
- *
  */
 
+package com.github.communication.context;
 
-
-package com.github.hermes;
+import io.netty.bootstrap.AbstractBootstrap;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class NettyTest {
-
+public class ServerCommunicationContext extends AbstractCommunicationContext {
+    ServerCommunicationContext(Type type, AbstractBootstrap<?, ?> bootstrap) {
+        super(type, bootstrap);
+    }
 
 
 }

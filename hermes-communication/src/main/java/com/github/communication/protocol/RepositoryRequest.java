@@ -14,19 +14,22 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  *
- *
  */
 
+package com.github.communication.protocol;
 
-
-package com.github.hermes;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class NettyTest {
-
-
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
+public class RepositoryRequest extends AbstractRequest {
+    private String repositoryName;
 
 }

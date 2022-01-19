@@ -14,19 +14,25 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  *
- *
  */
 
-
-
-package com.github.hermes;
+package com.github.communication.context;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class NettyTest {
+public class CommunicationContextHolder {
+
+    private static final ThreadLocal<AbstractCommunicationContext> applicationContextThreadLocal = new InheritableThreadLocal<>();
 
 
+    public static void bindApplicationContext(AbstractCommunicationContext context) {
+        applicationContextThreadLocal.set(context);
+    }
+
+    public static AbstractCommunicationContext getContext() {
+        return applicationContextThreadLocal.get();
+    }
 
 }

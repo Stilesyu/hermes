@@ -26,18 +26,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hermes-client</artifactId>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 
     <dependencies>
@@ -48,7 +36,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.hermes</groupId>
-            <artifactId>hermes-transportation</artifactId>
+            <artifactId>hermes-communication</artifactId>
             <version>${version}</version>
         </dependency>
     </dependencies>

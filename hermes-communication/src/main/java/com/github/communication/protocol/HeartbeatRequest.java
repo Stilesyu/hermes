@@ -18,15 +18,36 @@
  */
 
 
+package com.github.communication.protocol;
 
-package com.github.hermes;
+import com.github.hermes.common.ApiKeys;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import java.util.Date;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class NettyTest {
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
+public class HeartbeatRequest extends AbstractRequest {
+    private Date at;
 
 
+    public HeartbeatRequest() {
+        this.at = new Date();
+        super.code(ApiKeys.HEARTBEAT);
+        super.version(ApiKeys.HEARTBEAT);
+    }
 
+    public HeartbeatRequest(Date at) {
+        this.at = at;
+        super.code(ApiKeys.HEARTBEAT);
+        super.version(ApiKeys.HEARTBEAT);
+    }
 }

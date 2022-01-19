@@ -20,23 +20,12 @@
 
 package com.github.dispatch;
 
-import com.github.hermes.dispatch.center.ServerApplication;
-import com.github.hermes.dispatch.center.config.ServerNettyConfig;
-import com.github.transportation.Application;
-import org.junit.jupiter.api.Test;
-
 /**
  * @author Stiles yu
  * @since 1.0
  */
 public class ServerTest {
 
-
-    @Test
-    public void serverApplication() throws InterruptedException {
-        Application application = new ServerApplication(new ServerNettyConfig());
-        application.start();
-    }
 
 
 }

@@ -14,19 +14,26 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  *
- *
  */
 
+package com.github.communication.context;
 
-
-package com.github.hermes;
+import io.netty.bootstrap.AbstractBootstrap;
+import lombok.Builder;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class NettyTest {
+@Builder
+public class AbstractCommunicationContext {
+
+    public Type type;
+    public AbstractBootstrap<?, ?> bootstrap;
 
 
-
+    public enum Type {
+        CLIENT,
+        SERVER
+    }
 }

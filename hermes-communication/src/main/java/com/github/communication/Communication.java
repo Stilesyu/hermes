@@ -18,15 +18,15 @@
  */
 
 
-
-package com.github.hermes;
-
-/**
- * @author Stiles yu
- * @since 1.0
- */
-public class NettyTest {
+package com.github.communication;
 
 
+public interface Communication {
+
+
+    void load() throws InterruptedException;
+
+
+    void close();
 
 }

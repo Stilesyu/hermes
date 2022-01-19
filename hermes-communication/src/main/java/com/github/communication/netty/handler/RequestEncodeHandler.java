@@ -19,14 +19,24 @@
 
 
 
-package com.github.hermes;
+package com.github.communication.netty.handler;
+
+import com.github.hermes.common.utils.jackson.JacksonUtils;
+import com.github.communication.protocol.AbstractRequest;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class NettyTest {
+public class RequestEncodeHandler extends MessageToByteEncoder<AbstractRequest> {
 
+    public static String NAME = "convert abstractRequest to bytes";
 
-
+    @Override
+    protected void encode(ChannelHandlerContext channelHandlerContext, AbstractRequest abstractRequest, ByteBuf byteBuf) {
+        byteBuf.writeBytes(JacksonUtils.serialize(abstractRequest).getBytes());
+    }
 }
