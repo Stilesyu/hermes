@@ -31,7 +31,7 @@ public interface RemoteProcedureCall {
     AbstractResponse invokeSync(String remoteAddress, AbstractRequest request, long timeoutTime);
 
 
-    AbstractRequest invokeAsync(String remoteAddress, AbstractRequest request, long timeoutTime);
+    void invokeAsync(String remoteAddress, AbstractRequest request, long timeoutTime);
 
 
 }

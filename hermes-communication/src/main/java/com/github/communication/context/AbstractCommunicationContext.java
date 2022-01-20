@@ -18,18 +18,49 @@
 
 package com.github.communication.context;
 
+import com.github.communication.utils.SyncFuture;
 import io.netty.bootstrap.AbstractBootstrap;
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-@Builder
-public class AbstractCommunicationContext {
 
-    public Type type;
-    public AbstractBootstrap<?, ?> bootstrap;
+@SuperBuilder
+public abstract class AbstractCommunicationContext {
+
+    protected Type type;
+    protected AbstractBootstrap<?, ?> bootstrap;
+
+
+    public Type getType() {
+        return type;
+    }
+
+    public AbstractBootstrap<?, ?> getBootstrap() {
+        return bootstrap;
+    }
+
+    /**
+     * key:requestId
+     */
+    private final ConcurrentMap<Long, SyncFuture> responseMapping = new ConcurrentHashMap<>();
+
+    public void putResponseMapping(Long requestId, SyncFuture syncFuture) {
+        responseMapping.put(requestId, syncFuture);
+    }
+
+    public void removeResponseMapping(Long requestId) {
+        responseMapping.remove(requestId);
+    }
+
+    public SyncFuture getSyncFuture(Long requestId) {
+        return responseMapping.get(requestId);
+    }
 
 
     public enum Type {

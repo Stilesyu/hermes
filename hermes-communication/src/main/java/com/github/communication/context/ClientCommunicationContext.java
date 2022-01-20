@@ -18,62 +18,41 @@
 
 package com.github.communication.context;
 
-import com.github.communication.utils.SyncFuture;
-import com.github.hermes.common.exception.HermesParameterException;
 import com.github.communication.exception.HermesConnectException;
-import io.netty.bootstrap.AbstractBootstrap;
+import com.github.hermes.common.exception.HermesParameterException;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
+import lombok.experimental.SuperBuilder;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
+@SuperBuilder
 public class ClientCommunicationContext extends AbstractCommunicationContext {
 
-    /**
-     * key:requestId
-     */
-    private final ConcurrentMap<Long, SyncFuture> responseMapping = new ConcurrentHashMap<>();
     private Channel channel;
-
-    ClientCommunicationContext(Type type, AbstractBootstrap<?, ?> bootstrap) {
-        super(type, bootstrap);
-    }
 
 
     public Channel getChanel() {
         return channel;
     }
 
-    public void putResponseMapping(Long requestId, SyncFuture syncFuture) {
-        responseMapping.put(requestId, syncFuture);
-    }
-
-    public void remoteResponseMapping(Long requestId) {
-        responseMapping.remove(requestId);
-    }
-
-    public SyncFuture getSyncFuture(Long requestId) {
-        return responseMapping.get(requestId);
-    }
 
     public void doConnect() {
-        if (bootstrap == null) {
+        if (super.bootstrap == null) {
             throw new HermesParameterException("Bootstrap not initialized");
         }
-        if (bootstrap instanceof Bootstrap) {
-            ((Bootstrap) this.bootstrap).connect().addListener((ChannelFutureListener) future -> {
+        if (super.bootstrap instanceof Bootstrap) {
+            ((Bootstrap) super.bootstrap).connect().addListener((ChannelFutureListener) future -> {
                 if (!future.isSuccess()) {
                     future.channel().eventLoop().schedule(this::doConnect, 10, TimeUnit.SECONDS);
                     throw new HermesConnectException();
                 } else {
-                    channel = future.channel();
+                    this.channel = future.channel();
                 }
             });
         } else {

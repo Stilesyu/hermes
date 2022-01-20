@@ -18,19 +18,31 @@
 
 package com.github.communication.netty.handler;
 
+import com.github.communication.context.AbstractCommunicationContext;
+import com.github.communication.context.CommunicationContextHolder;
+import com.github.communication.protocol.AbstractResponse;
+import com.github.communication.utils.SyncFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
-public class ResponseHandler extends SimpleChannelInboundHandler {
+@Slf4j
+public class ResponseHandler extends SimpleChannelInboundHandler<AbstractResponse> {
 
-
+    AbstractCommunicationContext context = CommunicationContextHolder.getContext();
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-
+    protected void channelRead0(ChannelHandlerContext ctx, AbstractResponse msg) {
+        SyncFuture syncFuture = context.getSyncFuture(msg.getRequestId());
+        if (syncFuture == null) {
+            log.warn("Response can't match any request.The response ={}", msg);
+            return;
+        }
+        syncFuture.receive(msg);
+        context.removeResponseMapping(msg.getRequestId());
     }
 }

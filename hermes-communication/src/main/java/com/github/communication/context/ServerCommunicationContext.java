@@ -18,16 +18,14 @@
 
 package com.github.communication.context;
 
-import io.netty.bootstrap.AbstractBootstrap;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author Stiles yu
  * @since 1.0
  */
+@SuperBuilder
 public class ServerCommunicationContext extends AbstractCommunicationContext {
-    ServerCommunicationContext(Type type, AbstractBootstrap<?, ?> bootstrap) {
-        super(type, bootstrap);
-    }
 
 
 }

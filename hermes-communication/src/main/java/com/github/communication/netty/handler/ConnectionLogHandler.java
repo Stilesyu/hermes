@@ -34,7 +34,7 @@ public class ConnectionLogHandler extends ChannelDuplexHandler {
 
     public static String NAME = "connectionLogHandler";
 
-    private final boolean isClient = CommunicationContextHolder.getContext().type.equals(AbstractCommunicationContext.Type.CLIENT);
+    private final boolean isClient = AbstractCommunicationContext.Type.CLIENT.equals(CommunicationContextHolder.getContext().getType());
 
 
     @Override

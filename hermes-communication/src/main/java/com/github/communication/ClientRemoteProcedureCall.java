@@ -20,10 +20,10 @@ package com.github.communication;
 
 import com.github.communication.context.ClientCommunicationContext;
 import com.github.communication.context.CommunicationContextHolder;
+import com.github.communication.exception.HermesRequestException;
 import com.github.communication.protocol.AbstractRequest;
 import com.github.communication.protocol.AbstractResponse;
 import com.github.communication.utils.SyncFuture;
-import com.github.communication.exception.HermesRequestException;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import lombok.extern.slf4j.Slf4j;
@@ -69,12 +69,26 @@ public class ClientRemoteProcedureCall implements RemoteProcedureCall {
         } catch (Exception e) {
             log.warn("invokeOnWay:failed to send request.Remote address:{},error message:{}", channel.remoteAddress(), e.getMessage());
             throw new HermesRequestException(channel.remoteAddress());
+        }finally {
+            context.removeResponseMapping(request.getRequestId());
         }
     }
 
     @Override
-    public AbstractRequest invokeAsync(String remoteAddress, AbstractRequest request, long timeoutTime) {
-        return null;
+    public void invokeAsync(String remoteAddress, AbstractRequest request, long timeoutTime) {
+        try {
+            channel.writeAndFlush(request).addListener((ChannelFutureListener) future -> {
+                if (future.isSuccess()) {
+                    context.putResponseMapping(request.getRequestId(), new SyncFuture(timeoutTime));
+                    return;
+                }
+                log.warn("invokeOnWay:failed to send request.Remote address:{}", channel.remoteAddress());
+                throw new HermesRequestException(channel.remoteAddress());
+            });
+        } catch (Exception e) {
+            log.warn("invokeOnWay:failed to send request.Remote address:{},error message:{}", channel.remoteAddress(), e.getMessage());
+            throw new HermesRequestException(channel.remoteAddress());
+        }
     }
 
 
