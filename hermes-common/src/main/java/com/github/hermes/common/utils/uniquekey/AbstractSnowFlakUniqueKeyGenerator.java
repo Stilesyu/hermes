@@ -16,21 +16,43 @@
 
 package com.github.hermes.common.utils.uniquekey;
 
+import com.lmax.disruptor.RingBuffer;
+
 /**
  * Designed according to the twitter snowflake algorithm({https://github.com/twitter-archive/snowflake})
  * <p>
- * 0           000000000000000000      000000000000
- * ｜           ｜                            ｜
- * unused      timestamp                   businessId
+ * 0                000000000000000000          00                   00000                00000
+ * unused(1bit)     timestamp(42bit)            businessId(5bit)     workerId(5bit)       sequence(10bit)
  *
  * @author Stiles yu
  * @since 1.0
  */
-public class SnowFlakUniqueKeyGenerator implements UniqueKeyGenerator {
+public abstract class AbstractSnowFlakUniqueKeyGenerator implements UniqueKeyGenerator {
 
+    private final int workerBits = 0;
+    private final int sequenceBits = 0;
+    private final int businessId = 2;
+    //maxWorkerBits = 2^5-1
+    private long maxWorkerBits = ~(-1 << workerBits);
+    //
+    private RingBuffer<Long> buffer;
 
     @Override
     public long generate() {
-        return 0L;
+        return buffer.next();
     }
+
+
+    private void filling() {
+
+    }
+
+    private boolean needToBeFilled() {
+        return false;
+    }
+
+
+    protected abstract void batchGet();
+
+
 }
