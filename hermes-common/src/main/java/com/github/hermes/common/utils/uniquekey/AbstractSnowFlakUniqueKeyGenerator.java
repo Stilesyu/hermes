@@ -17,6 +17,10 @@
 package com.github.hermes.common.utils.uniquekey;
 
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.dsl.Disruptor;
+import com.lmax.disruptor.util.DaemonThreadFactory;
+
+import javax.xml.ws.Dispatch;
 
 /**
  * Designed according to the twitter snowflake algorithm({https://github.com/twitter-archive/snowflake})
@@ -35,24 +39,56 @@ public abstract class AbstractSnowFlakUniqueKeyGenerator implements UniqueKeyGen
     //maxWorkerBits = 2^5-1
     private long maxWorkerBits = ~(-1 << workerBits);
     //
-    private RingBuffer<Long> buffer;
+    private final int maxSequenceBits = 0;
+    //TODO must be power of 2
+    private final Disruptor<KeyEvent> dispatch = new Disruptor<>(KeyEvent::new, maxSequenceBits, DaemonThreadFactory.INSTANCE);
 
     @Override
     public long generate() {
-        return buffer.next();
+        return 0;
     }
 
 
     private void filling() {
-
+        for (long l : batchGet()) {
+            dispatch.handleEventsWith(((event, sequence, endOfBatch) -> event.setKey(l)));
+        }
+        dispatch.start();
     }
+
+
+    public static void main(String[] args) {
+        final Disruptor<KeyEvent> dispatch = new Disruptor<>(KeyEvent::new, 1024, DaemonThreadFactory.INSTANCE);
+        dispatch.handleEventsWith((event, sequence, endOfBatch) -> {
+            System.out.println(sequence);
+        });
+        dispatch.start();
+        RingBuffer<KeyEvent> ringBuffer = dispatch.getRingBuffer();
+        ringBuffer.publishEvent((event, sequence) -> event.setKey(1312));
+        ringBuffer.publishEvent((event, sequence) -> event.setKey(13121));
+    }
+
 
     private boolean needToBeFilled() {
         return false;
     }
 
 
-    protected abstract void batchGet();
+    protected abstract long[] batchGet();
+
+
+    static class KeyEvent {
+        private long key;
+
+        public KeyEvent setKey(long key) {
+            this.key = key;
+            return this;
+        }
+
+        public long getKey() {
+            return key;
+        }
+    }
 
 
 }
