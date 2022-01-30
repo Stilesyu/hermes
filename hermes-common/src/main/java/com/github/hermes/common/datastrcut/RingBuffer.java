@@ -33,7 +33,7 @@ abstract class RingBufferPad {
 
 public class RingBuffer<E> extends RingBufferPad {
     private final Object[] entries;
-    private int header = 1;
+    private int header = 0;
     private int tail = 0;
     private final int bufferSize;
     private long p11, p12, p13, p14, p15, p16, p17;
@@ -99,10 +99,6 @@ public class RingBuffer<E> extends RingBufferPad {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(2 ^ 4);
-    }
-
 
     public int readableSize() {
         if (header > tail) {
@@ -111,5 +107,17 @@ public class RingBuffer<E> extends RingBufferPad {
             return header - tail + bufferSize * 2;
         }
     }
+
+    public int writeableSize() {
+        if (isEmpty()) {
+            return bufferSize;
+        }
+        if (header > tail) {
+            return tail + bufferSize - header;
+        } else {
+            return tail - bufferSize - header;
+        }
+    }
+
 
 }

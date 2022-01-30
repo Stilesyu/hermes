@@ -39,7 +39,7 @@ public abstract class AbstractSnowFlakUniqueKeyGenerator implements UniqueKeyGen
     public long generate() {
         int fillingSize = fillingSize();
         if (this.buffer.readableSize() < fillingSize) {
-            this.buffer.saveBatch(nextIds(fillingSize));
+            this.buffer.saveBatch(nextIds(buffer.writeableSize()));
         }
         return buffer.read();
     }
