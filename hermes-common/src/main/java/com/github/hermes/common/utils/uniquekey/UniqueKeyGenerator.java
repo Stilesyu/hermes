@@ -22,5 +22,4 @@ package com.github.hermes.common.utils.uniquekey;
  */
 public interface UniqueKeyGenerator {
     long generate();
-
 }

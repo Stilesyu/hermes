@@ -19,6 +19,7 @@ package com.github.hermes.common.datastrcut;
 import com.github.hermes.common.exception.HermesException;
 import com.github.hermes.common.exception.HermesParameterException;
 
+
 /**
  * Solve false sharing with reference to the Disruptor
  * (https://github.com/LMAX-Exchange/disruptor)
@@ -86,19 +87,29 @@ public class RingBuffer<E> extends RingBufferPad {
         }
     }
 
-    public Object[] readBatch(int size) {
-        if (isEmpty() || size > bufferSize || header == (tail & (size - 1))) {
+    @SuppressWarnings("unchecked")
+    public E read() {
+        if (isEmpty()) {
             throw new HermesException("RingBuffer has no more data to read");
         }
-        Object[] result = new Object[size];
-        for (int i = 0; i < size; i++) {
-            if (tail+1>bufferSize*2-1){
-                result[i] = entries[tail=0];
-            }else {
-                result[i] = entries[++tail];
-            }
+        if (tail + 1 > bufferSize * 2 - 1) {
+            return (E) entries[tail = 0];
+        } else {
+            return (E) entries[++tail];
         }
-        return result;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(2 ^ 4);
+    }
+
+
+    public int readableSize() {
+        if (header > tail) {
+            return header - tail;
+        } else {
+            return header - tail + bufferSize * 2;
+        }
     }
 
 }

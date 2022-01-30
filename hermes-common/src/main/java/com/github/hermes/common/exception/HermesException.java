@@ -25,10 +25,10 @@ package com.github.hermes.common.exception;
 public class HermesException extends RuntimeException {
 
     public HermesException(String message) {
-        super("Hermes runtime exception:" + message);
+        super(message);
     }
 
     public HermesException(String message, Throwable cause) {
-        super("Hermes runtime exception:" + message, cause);
+        super(message, cause);
     }
 }
