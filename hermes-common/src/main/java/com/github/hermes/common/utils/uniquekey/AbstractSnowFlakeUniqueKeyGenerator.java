@@ -17,19 +17,25 @@
 package com.github.hermes.common.utils.uniquekey;
 
 import com.github.hermes.common.datastrcut.RingBuffer;
+import com.github.hermes.common.utils.ThreadUtils;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public abstract class AbstractSnowFlakUniqueKeyGenerator implements UniqueKeyGenerator {
+@Slf4j
+public abstract class AbstractSnowFlakeUniqueKeyGenerator implements UniqueKeyGenerator {
 
 
     private final RingBuffer<Long> buffer;
+    private final ExecutorService service = Executors.newSingleThreadExecutor(ThreadUtils.createThreadFactory("abstractSnowFlakeUniqueKey"));
 
     /**
      * @param bufferSize:Maximum size of RingBuffer,must be a power of 2
      * @author Stilesyu
      * @since 1.0
      */
-    public AbstractSnowFlakUniqueKeyGenerator(int bufferSize) {
+    public AbstractSnowFlakeUniqueKeyGenerator(int bufferSize) {
         this.buffer = new RingBuffer<>(bufferSize);
         buffer.saveBatch(nextIds(bufferSize));
     }
@@ -39,7 +45,9 @@ public abstract class AbstractSnowFlakUniqueKeyGenerator implements UniqueKeyGen
     public long generate() {
         int fillingSize = fillingSize();
         if (this.buffer.readableSize() < fillingSize) {
-            this.buffer.saveBatch(nextIds(buffer.writeableSize()));
+            int needFilledSize = buffer.writeableSize();
+            service.submit(() -> buffer.saveBatch(nextIds(needFilledSize)));
+            log.debug("RingBuffer has been filled {} ids", needFilledSize);
         }
         return buffer.read();
     }

@@ -17,7 +17,7 @@
 package com.github.communication.utils;
 
 import com.github.hermes.common.exception.HermesException;
-import com.github.hermes.common.utils.uniquekey.AbstractSnowFlakUniqueKeyGenerator;
+import com.github.hermes.common.utils.uniquekey.AbstractSnowFlakeUniqueKeyGenerator;
 
 /**
  * unused(1bit)  | timestamp(42bit)  |  workerId(5bit) |  flag(2bit)  | sequence(14bit)
@@ -25,7 +25,7 @@ import com.github.hermes.common.utils.uniquekey.AbstractSnowFlakUniqueKeyGenerat
  * @author Stiles yu
  * @since 1.0
  */
-public class RequestIdGenerator extends AbstractSnowFlakUniqueKeyGenerator {
+public class RequestIdGenerator extends AbstractSnowFlakeUniqueKeyGenerator {
     private final static int workerIdBits = 5;
     private final static int sequenceBits = 14;
     private final static int flagBits = 2;
