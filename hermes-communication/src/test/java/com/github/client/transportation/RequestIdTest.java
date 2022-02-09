@@ -43,14 +43,14 @@ public class RequestIdTest {
 
     @Test
     public void perform() {
-        long start = System.nanoTime();
         RequestIdGenerator generator = new RequestIdGenerator(1);
-        int size = 16383 * 100;
+        int size = 16383 * 3;
         Long[] result = new Long[size];
+        long start = System.currentTimeMillis();
         for (int i = 0; i < size; i++) {
             result[i] = generator.generate();
         }
-        System.out.println(System.nanoTime() - start);
+        System.out.println(System.currentTimeMillis() - start);
     }
 
 }

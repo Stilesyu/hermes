@@ -17,18 +17,16 @@
 package com.github.hermes.common.utils.uniquekey;
 
 import com.github.hermes.common.datastrcut.RingBuffer;
-import com.github.hermes.common.utils.ThreadUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
 
 @Slf4j
 public abstract class AbstractSnowFlakeUniqueKeyGenerator implements UniqueKeyGenerator {
 
 
     private final RingBuffer<Long> buffer;
-    private final ExecutorService service = Executors.newSingleThreadExecutor(ThreadUtils.createThreadFactory("abstractSnowFlakeUniqueKey"));
+//    private final ExecutorService service = Executors.newFixedThreadPool(1, ThreadUtils.createThreadFactory("abstractSnowFlakeUniqueKey"));
 
     /**
      * @param bufferSize:Maximum size of RingBuffer,must be a power of 2
@@ -42,12 +40,11 @@ public abstract class AbstractSnowFlakeUniqueKeyGenerator implements UniqueKeyGe
 
 
     @Override
-    public long generate() {
+    public synchronized long generate() {
         int fillingSize = fillingSize();
-        if (this.buffer.readableSize() < fillingSize) {
+        if (this.buffer.isEmpty()) {
             int needFilledSize = buffer.writeableSize();
-            service.submit(() -> buffer.saveBatch(nextIds(needFilledSize)));
-            log.debug("RingBuffer has been filled {} ids", needFilledSize);
+            buffer.saveBatch(nextIds(needFilledSize));
         }
         return buffer.read();
     }

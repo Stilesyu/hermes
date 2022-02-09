@@ -74,7 +74,8 @@ public class RingBuffer<E> extends RingBufferPad {
 
     public void saveBatch(E[] entries) {
         int size = entries.length;
-        // ((tail & (size - 1)) ^ bufferSize) = (tail%size)^bufferSize
+        // ((header & (size - 1)) ^ bufferSize) = (header%size)^bufferSize
+        //Fixme
         if (isFull() || size > bufferSize || tail == ((header & (size - 1)) ^ bufferSize)) {
             throw new HermesException("RingBuffer has no more space to hold data");
         }
