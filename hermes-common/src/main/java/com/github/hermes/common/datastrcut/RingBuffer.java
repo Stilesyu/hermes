@@ -21,8 +21,7 @@ import com.github.hermes.common.exception.HermesParameterException;
 
 
 /**
- * Solve false sharing with reference to the Disruptor
- * (https://github.com/LMAX-Exchange/disruptor)
+ * Solve false sharing(https://mechanical-sympathy.blogspot.com/2011/07/false-sharing.html)
  *
  * @author Stiles yu
  * @since 1.0
@@ -36,6 +35,7 @@ public class RingBuffer<E> extends RingBufferPad {
     private int header = 0;
     private int tail = 0;
     private final int bufferSize;
+    private final int size;
     private long p11, p12, p13, p14, p15, p16, p17;
 
     public RingBuffer(int bufferSize) {
@@ -46,12 +46,13 @@ public class RingBuffer<E> extends RingBufferPad {
             throw new HermesParameterException("bufferSize must be a power of 2");
         }
         this.bufferSize = bufferSize;
+        this.size = bufferSize * 2;
         entries = new Object[bufferSize + bufferSize/*mirror*/];
     }
 
 
     /**
-     * TO make object memory as contiguous as possible
+     * To make object memory as contiguous as possible
      *
      * @author Stilesyu
      * @since 1.0
@@ -73,14 +74,13 @@ public class RingBuffer<E> extends RingBufferPad {
 
 
     public void saveBatch(E[] entries) {
-        int size = entries.length;
-        // ((header & (size - 1)) ^ bufferSize) = (header%size)^bufferSize
-        //Fixme
-        if (isFull() || size > bufferSize || tail == ((header & (size - 1)) ^ bufferSize)) {
+        int saveSize = entries.length;
+        //(header + saveSize) & (size - 1) = (header+saveSize) % size
+        if (isFull() || saveSize > bufferSize || (tail ^ bufferSize) < ((header + saveSize) & (size - 1))) {
             throw new HermesException("RingBuffer has no more space to hold data");
         }
         for (E entry : entries) {
-            if (header + 1 > bufferSize * 2 - 1) {
+            if (header + 1 > size - 1) {
                 this.entries[header = 0] = entry;
             } else {
                 this.entries[++header] = entry;
@@ -93,7 +93,7 @@ public class RingBuffer<E> extends RingBufferPad {
         if (isEmpty()) {
             throw new HermesException("RingBuffer has no more data to read");
         }
-        if (tail + 1 > bufferSize * 2 - 1) {
+        if (tail + 1 > size - 1) {
             return (E) entries[tail = 0];
         } else {
             return (E) entries[++tail];
@@ -102,18 +102,15 @@ public class RingBuffer<E> extends RingBufferPad {
 
 
     public int readableSize() {
-        if (header > tail) {
+        if (header >= tail) {
             return header - tail;
         } else {
-            return header - tail + bufferSize * 2;
+            return header - tail + size;
         }
     }
 
     public int writeableSize() {
-        if (isEmpty()) {
-            return bufferSize;
-        }
-        if (header > tail) {
+        if (header >= tail) {
             return tail + bufferSize - header;
         } else {
             return tail - bufferSize - header;

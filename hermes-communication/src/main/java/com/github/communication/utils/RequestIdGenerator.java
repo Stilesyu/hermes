@@ -89,9 +89,8 @@ public class RequestIdGenerator extends AbstractSnowFlakeUniqueKeyGenerator {
 
 
     @Override
-    protected int fillingSize() {
-        //return 511
-        return maxSequence >> 5;
+    protected int fillingThreshold() {
+        return 0;
     }
 
 }

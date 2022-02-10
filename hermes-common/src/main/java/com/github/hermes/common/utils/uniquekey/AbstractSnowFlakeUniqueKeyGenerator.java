@@ -20,13 +20,11 @@ import com.github.hermes.common.datastrcut.RingBuffer;
 import lombok.extern.slf4j.Slf4j;
 
 
-
 @Slf4j
 public abstract class AbstractSnowFlakeUniqueKeyGenerator implements UniqueKeyGenerator {
 
 
     private final RingBuffer<Long> buffer;
-//    private final ExecutorService service = Executors.newFixedThreadPool(1, ThreadUtils.createThreadFactory("abstractSnowFlakeUniqueKey"));
 
     /**
      * @param bufferSize:Maximum size of RingBuffer,must be a power of 2
@@ -41,8 +39,8 @@ public abstract class AbstractSnowFlakeUniqueKeyGenerator implements UniqueKeyGe
 
     @Override
     public synchronized long generate() {
-        int fillingSize = fillingSize();
-        if (this.buffer.isEmpty()) {
+        int fillingSize = fillingThreshold();
+        if (this.buffer.readableSize() <= fillingSize) {
             int needFilledSize = buffer.writeableSize();
             buffer.saveBatch(nextIds(needFilledSize));
         }
@@ -51,7 +49,8 @@ public abstract class AbstractSnowFlakeUniqueKeyGenerator implements UniqueKeyGe
 
     protected abstract Long[] nextIds(int size);
 
-    protected abstract int fillingSize();
+
+    protected abstract int fillingThreshold();
 
 
 }
